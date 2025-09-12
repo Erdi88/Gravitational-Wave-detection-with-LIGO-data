@@ -24,7 +24,6 @@ The assignment focuses on analyzing real LIGO data to verify the detection of gr
 - Applying low-pass filtering to highlight the gravitational wave signal.  
 - Estimating time delays between the two detectors.  
 - Calculating and visualizing dynamic spectra (spectrograms).  
-- Optional improvements for extra points, e.g., custom filters or noise reduction.
 
 ## Requirements
 
