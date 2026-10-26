@@ -3,11 +3,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal.windows import hann
 from scipy.signal import correlate
+from pathlib import Path
 
-h = h5py.File("H-H1_LOSC_4_V2-1126259446-32.hdf5", "r")
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data"
+FIGURES = ROOT / "figures"
+
+
+h = h5py.File(DATA / "H-H1_LOSC_4_V2-1126259446-32.hdf5", "r")
 data_h = h["strain/Strain"][()]  
 
-L = h5py.File("L-L1_LOSC_4_V2-1126259446-32.hdf5", "r")
+L = h5py.File(DATA / "L-L1_LOSC_4_V2-1126259446-32.hdf5", "r")
 data_L = L["strain/Strain"][()]  
 
 
@@ -74,6 +80,6 @@ plt.xlabel("time")
 plt.ylabel("Magnitude")
 plt.xlim(16.3*f_s, 16.5*f_s)
 plt.legend()
-plt.savefig("Task7a1.png")
+plt.savefig(FIGURES / "Task7a1.png")
 plt.show()
 

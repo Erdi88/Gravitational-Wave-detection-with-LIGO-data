@@ -3,6 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from scipy.signal.windows import hann, hamming
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data"
+FIGURES = ROOT / "figures"
+
 #parameters
 f_s = 4096  
 f_1 = 31.5 
@@ -29,7 +35,7 @@ plt.xlabel('Samples')
 plt.ylabel('Amplitude')
 plt.title('Original and Windowed Signal')
 plt.legend(loc='upper right')
-plt.savefig("Task3b.png")
+plt.savefig(FIGURES / "Task3b.png")
 plt.show()
 
 #compute the FFT of the signals
@@ -57,7 +63,7 @@ plt.xlabel('Frequency (Hz)')
 plt.ylabel('Power (dB)')
 plt.title('Power spectrum for original and windowed signal')
 plt.legend()
-plt.savefig("Task3d.png")
+plt.savefig(FIGURES / "Task3d.png")
 
 #Freq 31.5, 1234.56 Hz
 for f in [31.5, 1234.56]:
@@ -66,7 +72,7 @@ for f in [31.5, 1234.56]:
 # plt.scatter(x = f_1, color='green', label='31.5 Hz')
 # plt.scatter(x = f_2, color='red', label='1234.56 Hz')
 plt.legend()
-plt.savefig("Task3e.png")
+plt.savefig(FIGURES / "Task3e.png")
 plt.show()
 
 
@@ -92,7 +98,7 @@ plt.legend()
 plt.grid(True)
 
 plt.suptitle('Power Spectrum for Original and Windowed Signal')
-plt.savefig("Task3d2.png")
+plt.savefig(FIGURES / "Task3d2.png")
 plt.show()
 
 
@@ -131,5 +137,5 @@ plt.title("Power Spectrum Comparison: Rectangular and Hann Windows")
 # plt.legend(loc='lower left')
 plt.legend()
 plt.grid()
-plt.savefig('Task3e2.png')
+plt.savefig(FIGURES / "Task3e2.png")
 plt.show()

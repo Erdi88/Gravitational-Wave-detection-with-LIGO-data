@@ -1,49 +1,41 @@
-# Gravitational Wave Detection with LIGO Data
+# Detecting Gravitational Waves in LIGO Data (GW150914)
 
-## Overview
+Signal-processing pipeline that recovers the **first directly detected gravitational wave** (14 September 2015) from the raw strain data of the two LIGO detectors in Hanford (H1) and Livingston (L1). The pipeline uses window functions, power-spectrum analysis, spectral whitening, FIR low-pass filtering, time-delay estimation between the detectors and a time–frequency analysis.
 
-This repository contains my solution for **Programming Assignment 3: Gravitational Wave Detection with LIGO Data**. The goal of this assignment is to apply signal processing techniques to detect gravitational wave signals from the LIGO detectors (Hanford and Livingston).
+📄 **Report:** [`report/LIGO_signal_processing_report.pdf`](report/LIGO_signal_processing_report.pdf)
 
-The assignment focuses on analyzing real LIGO data to verify the detection of gravitational waves using:
+<p align="center">
+  <img src="figures/Task8bh.png" width="49%" alt="Spectrogram showing the chirp">
+  <img src="figures/Task6f-b.png" width="49%" alt="Whitened and filtered strain">
+</p>
 
-- Discrete Fourier Transforms (DFT)  
-- Tapered windowing (Hann and Hamming)  
-- Whitening filters  
-- Low-pass filters  
-- Time-frequency analysis (dynamic spectrum / spectrogram)  
+*Left: dynamic power spectrum of the whitened Hanford signal. The characteristic "chirp", rising from about 35 Hz to about 250 Hz at t ≈ 16.4 s, is the inspiral and merger of two black holes. Right: whitened and low-pass filtered strain from both detectors around the event.*
 
-> **Note:** This project is educational and focuses on signal processing rather than the physics of LIGO.
+## Pipeline
 
-## Features
+| Step | Script | What it does |
+|---|---|---|
+| 1–2 | `task1_2_load_and_plot.py` | Read the HDF5 strain files (131,072 samples, f<sub>s</sub> = 4096 Hz, 32 s) |
+| 3 | `task3_window_functions.py`, `task3g_hann_vs_hamming.py` | Spectral leakage on a test signal with a 10⁻⁵ amplitude ratio. Rectangular, Hann and Hamming windows compared. The Hann window is chosen because it is the only one that resolves the weak tone |
+| 4 | `task4_power_spectrum.py` | Hann-windowed power spectrum (dB) of both detectors, with identification of the strong instrumental lines |
+| 5 | `task5_whitening.py` | **Whitening** in the frequency domain (ĥ[k] = 1/\|x̂[k]\|) followed by an inverse FFT. The event appears at t ≈ 16.2–16.5 s |
+| 6 | `task6_lowpass_filter.py` | Running-mean FIR low-pass filter (L = 8, −6 dB near 300 Hz) with group-delay compensation, τ = (L−1)/(2f<sub>s</sub>) = 0.85 ms |
+| 7 | `task7_time_delay.py` | **Arrival-time difference** between the detectors: n₀ = 19 samples → **Δt ≈ 4.6 ms**. This is below the ~10 ms light travel time between the sites, which is consistent with a wave propagating at the speed of light |
+| 8 | `task8_spectrogram.py` | Dynamic power spectrum (spectrogram) that reveals the chirp |
 
-- Reading HDF5 LIGO data for Hanford (H1) and Livingston (L1) detectors.  
-- Plotting raw strain signals in the time domain.  
-- Applying tapered window functions for improved spectral analysis.  
-- Computing and plotting power spectra to identify narrowband interference.  
-- Implementing whitening filters in the frequency domain.  
-- Applying low-pass filtering to highlight the gravitational wave signal.  
-- Estimating time delays between the two detectors.  
-- Calculating and visualizing dynamic spectra (spectrograms).  
-
-## Requirements
-
-- Python 3.7+  
-- `numpy`  
-- `scipy`  
-- `matplotlib`  
-- `h5py`  
-
-> Tested on Python 3.10.
-
-## Usage
-
-1. **Download LIGO data files** from the course repository:  
-   - `H-H1_LOSC_4_V2-1126259446-32.hdf5`  
-   - `L-L1_LOSC_4_V2-1126259446-32.hdf5`  
-
-2. Place the files in the same directory as the Python scripts.
-
-3. Run the main analysis script:
+## Running
 
 ```bash
-python ligo_analysis.py
+pip install -r requirements.txt
+python src/task5_whitening.py       # any script, run from the repository root
+```
+
+The figures are written to `figures/`.
+
+## Data
+
+The strain data (`data/*.hdf5`, 32 s around GW150914 at 4 kHz) comes from the [Gravitational Wave Open Science Center (GWOSC)](https://gwosc.org), released under CC BY 4.0.
+> LIGO Scientific Collaboration and Virgo Collaboration, *Observation of Gravitational Waves from a Binary Black Hole Merger*, Phys. Rev. Lett. 116, 061102 (2016).
+
+---
+*Programming assignment in FYS-2006 – Signal Processing, UiT The Arctic University of Norway (autumn 2024).*

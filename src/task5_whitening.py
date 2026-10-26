@@ -1,12 +1,18 @@
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
-
-h = h5py.File("H-H1_LOSC_4_V2-1126259446-32.hdf5", "r")
-data_h = h["strain/Strain"][()]
-L = h5py.File("L-L1_LOSC_4_V2-1126259446-32.hdf5", "r")
-data_L = L["strain/Strain"][()]
 from scipy.signal.windows import hann
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data"
+FIGURES = ROOT / "figures"
+
+h = h5py.File(DATA / "H-H1_LOSC_4_V2-1126259446-32.hdf5", "r")
+data_h = h["strain/Strain"][()]
+L = h5py.File(DATA / "L-L1_LOSC_4_V2-1126259446-32.hdf5", "r")
+data_L = L["strain/Strain"][()]
+
 
 f_s = 4096
 N_h = len(data_h)
@@ -57,5 +63,5 @@ plt.xlim(0, 32)
 plt.grid()
 
 plt.tight_layout()
-plt.savefig("Task5c.png")
+plt.savefig(FIGURES / "Task5c.png")
 plt.show()
